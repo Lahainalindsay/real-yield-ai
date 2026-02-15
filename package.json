@@ -1,0 +1,16 @@
+{
+  "name": "real-bnb-vault",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "contracts",
+    "app"
+  ],
+  "scripts": {
+    "build": "npm run build -w contracts && npm run build -w app",
+    "dev": "npm run dev -w app",
+    "deploy:bscTestnet": "npm run deploy:bscTestnet -w contracts",
+    "deploy:opBnbTestnet": "npm run deploy:opBnbTestnet -w contracts",
+    "test": "npm run test -w contracts"
+  }
+}

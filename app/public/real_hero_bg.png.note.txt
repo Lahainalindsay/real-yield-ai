@@ -1,0 +1,1 @@
+Placeholder image: replace public/real_hero_bg.png with your branded full-screen hero background.
