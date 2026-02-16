@@ -148,7 +148,10 @@ Yield Oracle Address: 0xf55CA673F47ceE7aF895f9a641112D78C76c2E27
 
 Strategy Manager Address: 0x7Bb60C4709efA8AD7472De272F7c26f9433F7804
 
-Proof Deposit Transaction Hash: TBD
+Proof Deposit Transaction Hash: 0x5cec10af72d79276ed716face9bec90ca6220afc57ffdb7df4a45899bdf7f846
+Proof Deposit Explorer: https://testnet.bscscan.com/tx/0x5cec10af72d79276ed716face9bec90ca6220afc57ffdb7df4a45899bdf7f846
+Agent Execution Transaction Hash: 0xf55d75d5d696cd6daa26ff2e995112ba0592cb3993e5522879cb470d0af6a2d5
+Agent Execution Explorer: https://testnet.bscscan.com/tx/0xf55d75d5d696cd6daa26ff2e995112ba0592cb3993e5522879cb470d0af6a2d5
 
 🤖 AI Build Log
 
