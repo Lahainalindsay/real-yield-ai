@@ -6,6 +6,10 @@ type Snapshot = {
   vaultBalance: string;
   totalAssets: string;
   apy: string;
+  activeStrategyId?: number;
+  opportunityScore?: string;
+  riskScoreB?: string;
+  recommendation?: string;
 };
 
 type Props = {

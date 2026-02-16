@@ -17,6 +17,10 @@ async function main() {
   const oracle = await YieldOracleMock.deploy();
   await oracle.waitForDeployment();
 
+  const StrategyManager = await ethers.getContractFactory("StrategyManager");
+  const strategyManager = await StrategyManager.deploy();
+  await strategyManager.waitForDeployment();
+
   const Vault = await ethers.getContractFactory("Vault");
   const vault = await Vault.deploy(await erc20.getAddress(), await oracle.getAddress());
   await vault.waitForDeployment();
@@ -28,11 +32,22 @@ async function main() {
   const mintTx = await erc20.mint(deployer.address, mintAmount);
   await mintTx.wait();
 
+  // Strategy A: safer baseline
+  const setStratATx = await strategyManager.setStrategy(1, "Strategy A", 420, 9000, 3000, true);
+  await setStratATx.wait();
+  // Strategy B: higher APY candidate used by deterministic agent check
+  const setStratBTx = await strategyManager.setStrategy(2, "Strategy B", 650, 8000, 3500, true);
+  await setStratBTx.wait();
+
+  const setActiveTx = await vault.setActiveStrategy(1);
+  await setActiveTx.wait();
+
   const output = {
     chainId: Number(chainId),
     erc20: await erc20.getAddress(),
     vault: await vault.getAddress(),
     yieldOracle: await oracle.getAddress(),
+    strategyManager: await strategyManager.getAddress(),
     deployer: deployer.address
   };
 
@@ -55,6 +70,7 @@ async function main() {
   console.log("\nProof Tx instruction:");
   console.log(`cd contracts && npx hardhat run scripts/proofTx.ts --network ${network.name}`);
   console.log("This will approve+deposit 1 mUSDC and write deployments/proof-<chainId>.json");
+  console.log(`Agent instruction: npx hardhat run scripts/runAgentOnce.ts --network ${network.name}`);
 }
 
 main().catch((error) => {

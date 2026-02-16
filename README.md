@@ -1,114 +1,34 @@
-# real-bnb-vault
+# real-yield-ai
 
-Good Vibes Only: OpenClaw Edition submission.
+Good Vibes Only: OpenClaw Edition MVP.
 
-Track suggestion: **DeFi + Agent (AI explains onchain state)**
+## Overview
+This repo delivers:
+- Landing page with full-screen hero + overlay CTAs
+- Vault app (`/app`) for wallet connect, approve/deposit/withdraw, strategy state
+- Yield insights page (`/yield`) for APY + strategy metrics + deterministic recommendation
+- AI assistant API (`/api/assistant`) that explains decisions from onchain snapshot data
+- Hardhat v2 + TypeScript contracts on BSC Testnet / opBNB Testnet
 
-## What this is
-A reproducible monorepo MVP with:
-- Landing page (`/`) for Real BNB Vault
-- Vault dApp (`/app`) with wallet connect, network checks, approve/deposit/withdraw
-- Yield page (`/yield`) with APY read, 7-day chart, and AI assistant panel
-- Solidity contracts on BSC Testnet or opBNB Testnet
+## Compliance Notes
+- Onchain proof: contract addresses and tx hashes are written to `deployments/*.json`
+- Reproducible: public repo + setup + run instructions in this README
+- AI-first: `AI_BUILD_LOG.md` documents prompts, outputs, edits, decisions
+- No token launch/fundraising: no liquidity launch, no airdrop pumping, no fundraising logic
 
-## Hackathon Compliance
-- Onchain proof required: deploy + deposit tx hash recorded in `deployments/proof-<chainId>.json`
-- Reproducible: public repo + demo link + setup instructions in this README
-- AI-first: AI build process documented in `AI_BUILD_LOG.md`
-- No token launch/fundraising mechanics: no liquidity launch, no airdrop pumping, no fundraising module
+## Tech Stack
+- Hardhat v2 + TypeScript
+- Solidity `0.8.20`
+- OpenZeppelin contracts
+- Next.js pages router + ethers v5 + Web3Modal
 
-## Monorepo Structure
-- `contracts`: Hardhat + Solidity + tests + deploy scripts
-- `app`: Next.js frontend + API assistant routes
-- `deployments`: chain outputs and proof tx hash records
+## Contracts
+- `ERC20Mock` (`mUSDC`, mintable by owner)
+- `YieldOracleMock` (`currentAPYBps`, owner updatable)
+- `StrategyManager` (onchain strategy metrics registry)
+- `Vault` (deposit/withdraw + `activeStrategyId` + owner/agent strategy switch)
 
-## Prerequisites
-- Node.js 18+
-- npm 9+
-- A funded test wallet (BSC testnet BNB)
-
-## Install
-```bash
-npm install
-```
-
-## Environment Setup
-
-### 1) Contracts env
-```bash
-cp contracts/.env.example contracts/.env
-```
-Set:
-- `PRIVATE_KEY` (deployer wallet private key)
-- `BSCSCAN_API_KEY` (optional, for verify)
-- `BSC_TESTNET_RPC_URL` (defaults already provided)
-- `OPBNB_TESTNET_RPC_URL` (defaults already provided)
-
-### 2) App env
-```bash
-cp app/.env.local.example app/.env.local
-```
-Set:
-- `NEXT_PUBLIC_DEFAULT_CHAIN_ID` (`97` or `5611`)
-- `NEXT_PUBLIC_VAULT_ADDRESS`
-- `NEXT_PUBLIC_ERC20_ADDRESS`
-- `NEXT_PUBLIC_YIELD_ORACLE_ADDRESS`
-- `OPENAI_API_KEY`
-- `AI_MODEL` (optional, defaults to `gpt-4o-mini`)
-
-## Compile + Test
-```bash
-npm run test
-```
-
-## Deploy (BSC Testnet default)
-```bash
-npm run deploy:bscTestnet
-```
-This deploys:
-- `ERC20Mock` (mUSDC)
-- `YieldOracleMock`
-- `Vault`
-
-And writes:
-- `deployments/97.json`
-- `app/public/deployments/97.json`
-
-## Deploy (opBNB Testnet)
-```bash
-npm run deploy:opBnbTestnet
-```
-Writes:
-- `deployments/5611.json`
-- `app/public/deployments/5611.json`
-
-## Onchain Proof Transaction
-Run the proof script (example BSC testnet):
-```bash
-cd contracts
-npx hardhat run scripts/proofTx.ts --network bscTestnet
-```
-This executes an onchain flow:
-1. Approve `1 mUSDC` to vault
-2. Deposit `1 mUSDC`
-3. Writes tx hashes to `deployments/proof-97.json`
-
-For opBNB:
-```bash
-npx hardhat run scripts/proofTx.ts --network opBnbTestnet
-```
-Writes `deployments/proof-5611.json`.
-
-## Run App
-```bash
-npm run dev
-```
-Open:
-- `http://localhost:3000/` landing page
-- `http://localhost:3000/app` vault app
-- `http://localhost:3000/yield` yield + AI assistant
-
-## Network Info
+## Network Config
 Default: **BSC Testnet**
 - Chain ID: `97`
 - RPC: `https://data-seed-prebsc-1-s1.bnbchain.org:8545`
@@ -117,53 +37,92 @@ Default: **BSC Testnet**
 Optional: **opBNB Testnet**
 - Chain ID: `5611`
 - RPC: `https://opbnb-testnet-rpc.bnbchain.org`
+- Explorer: `https://testnet.opbnbscan.com`
 
-## Testnet BNB Faucet
-- BNB Chain official faucet portal (search: "BNB testnet faucet")
-- Bridge/faucet sources vary; use official BNB docs for current source
+## Setup
+```bash
+npm install
+cp contracts/.env.example contracts/.env
+cp app/.env.local.example app/.env.local
+```
 
-## Contract Addresses (fill after deploy)
-BSC Testnet (`deployments/97.json`):
-- ERC20 (mUSDC): `TBD`
-- Vault: `TBD`
-- YieldOracleMock: `TBD`
+Set `contracts/.env`:
+- `PRIVATE_KEY`
+- `BSCSCAN_API_KEY`
+- `OPBNBSCAN_API_KEY`
+- `BSC_TESTNET_RPC_URL`
+- `OPBNB_TESTNET_RPC_URL`
 
-opBNB Testnet (`deployments/5611.json`):
-- ERC20 (mUSDC): `TBD`
-- Vault: `TBD`
-- YieldOracleMock: `TBD`
+Set `app/.env.local`:
+- `NEXT_PUBLIC_DEFAULT_CHAIN_ID` (`97` recommended)
+- `NEXT_PUBLIC_ERC20_ADDRESS` (optional if loading `public/deployments/<chainId>.json`)
+- `NEXT_PUBLIC_VAULT_ADDRESS` (optional)
+- `NEXT_PUBLIC_YIELD_ORACLE_ADDRESS` (optional)
+- `NEXT_PUBLIC_STRATEGY_MANAGER_ADDRESS` (optional)
+- `OPENAI_API_KEY`
+- `AI_MODEL` (optional)
 
-## Proof Tx Hash (fill after proof run)
-- BSC Testnet proof tx hash: `TBD` (see `deployments/proof-97.json`)
-- opBNB Testnet proof tx hash: `TBD` (see `deployments/proof-5611.json`)
+## Compile and Test
+```bash
+npm run test
+npm run build
+```
 
-## Demo Link / Video Checklist
-- [ ] Deployed contracts shown on explorer
-- [ ] Proof tx hash shown on explorer
-- [ ] Landing page UX walkthrough
-- [ ] `/app` approve/deposit/withdraw success flow
-- [ ] `/yield` APY + chart + assistant Q&A
-- [ ] AI safety note: explains only, does not transact
-- [ ] Public repo URL added
-- [ ] Demo video URL added
+## Deploy (BSC Testnet)
+```bash
+npm run deploy:bscTestnet
+```
+Writes:
+- `deployments/97.json`
+- `app/public/deployments/97.json`
 
-Demo URL: `TBD`
-Video URL: `TBD`
+## Produce Onchain Proof
+Proof deposit tx:
+```bash
+cd contracts
+npx hardhat run scripts/proofTx.ts --network bscTestnet
+```
+Writes:
+- `deployments/proof-97.json`
 
-## Verify Contracts (optional)
+Run deterministic agent once:
+```bash
+cd ..
+npm run run-agent:bscTestnet
+```
+Writes:
+- `deployments/decision-log-97.json`
+- `app/public/deployments/decision-log-97.json`
+
+## Run Frontend
+```bash
+npm run dev
+```
+Open:
+- `http://localhost:3000/`
+- `http://localhost:3000/app`
+- `http://localhost:3000/yield`
+
+## Verify Contracts
 ```bash
 cd contracts
 npx hardhat run scripts/verify.ts --network bscTestnet
+# or
+npx hardhat run scripts/verify.ts --network opBnbTestnet
 ```
 
-## Submission Checklist
-- [x] Onchain contracts + vault transactions
-- [x] Frontend dApp + AI assistant endpoint
-- [x] AI Build Log included
-- [x] Reproducible setup instructions
-- [x] No token launch/fundraising mechanics
+## Testnet BNB
+Use the official BNB Chain testnet faucet and docs for the current faucet URL.
 
-🚀 Good Vibes Only: OpenClaw Edition Submission Checklist
+## Where Submission Evidence Lives
+- Contract addresses: `deployments/97.json` (or `deployments/5611.json`)
+- Deposit proof tx hash: `deployments/proof-97.json` (or `proof-5611.json`)
+- Agent action tx hash: `deployments/decision-log-97.json` (or `decision-log-5611.json`)
+
+## No Token Launch Policy
+This project does not include token launch, LP bootstrap, fundraising, or airdrop mechanics.
+
+## Good Vibes Only: OpenClaw Edition Submission Checklist
 
 Track Selected:
 ☑ DeFi
@@ -207,8 +166,10 @@ Architecture decisions
 
 To reproduce locally:
 
+```bash
 git clone https://github.com/Lahainalindsay/real-yield-ai.git
 cd real-yield-ai
 npm install
 npm run deploy:bscTestnet
 npm run dev
+```

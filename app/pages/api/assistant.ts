@@ -7,7 +7,17 @@ type Snapshot = {
   vaultBalance?: string;
   totalAssets?: string;
   apy?: string;
+  activeStrategyId?: number;
+  opportunityScore?: string;
+  riskScoreB?: string;
+  recommendation?: string;
 };
+
+const ASSISTANT_PROMPT_TEMPLATE =
+  "You are an AI market insights explainer for a vault hackathon app. " +
+  "You must only explain the deterministic recommendation and onchain snapshot. " +
+  "Never instruct wallet signing, never execute transactions, and never claim guaranteed returns. " +
+  "Respond in 3-6 sentences of plain English.";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -32,11 +42,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const model = process.env.AI_MODEL || "gpt-4o-mini";
 
   const system =
-    "You are a vault explainer assistant for a hackathon demo. " +
-    "Use provided onchain snapshot only. " +
-    "AI explains, does not transact, does not execute funds movement, and does not promise returns.";
+    ASSISTANT_PROMPT_TEMPLATE +
+    " Mention risk drivers (utilization/liquidity), APY tradeoff, and why recommendation could change.";
 
-  const user = `Question: ${question}\n\nOnchain Snapshot:\n- Wallet: ${snapshot?.address || "N/A"}\n- User mUSDC Balance: ${snapshot?.userBalance || "0"}\n- User Vault Balance: ${snapshot?.vaultBalance || "0"}\n- Vault Total Assets: ${snapshot?.totalAssets || "0"}\n- Current APY (%): ${snapshot?.apy || "0"}\n\nRespond in plain English with concise bullets.`;
+  const user = `Question: ${question}\n\nOnchain Snapshot:\n- Wallet: ${snapshot?.address || "N/A"}\n- User mUSDC Balance: ${snapshot?.userBalance || "0"}\n- User Vault Balance: ${snapshot?.vaultBalance || "0"}\n- Vault Total Assets: ${snapshot?.totalAssets || "0"}\n- Current APY (%): ${snapshot?.apy || "0"}\n- Active Strategy ID: ${snapshot?.activeStrategyId ?? 0}\n- Opportunity Score: ${snapshot?.opportunityScore || "0.0000"}\n- Risk Score (Strategy B): ${snapshot?.riskScoreB || "0.0000"}\n- Deterministic Recommendation: ${snapshot?.recommendation || "Hold current strategy"}`;
 
   try {
     const completion = await client.chat.completions.create({

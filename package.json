@@ -11,6 +11,8 @@
     "dev": "npm run dev -w app",
     "deploy:bscTestnet": "npm run deploy:bscTestnet -w contracts",
     "deploy:opBnbTestnet": "npm run deploy:opBnbTestnet -w contracts",
+    "run-agent:bscTestnet": "npm run agent:once:bscTestnet -w contracts",
+    "run-agent:opBnbTestnet": "npm run agent:once:opBnbTestnet -w contracts",
     "test": "npm run test -w contracts"
   }
 }

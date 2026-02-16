@@ -15,6 +15,8 @@ export default function AppPage() {
   const [vaultBalance, setVaultBalance] = useState("0.0000");
   const [totalAssets, setTotalAssets] = useState("0.0000");
   const [apy, setApy] = useState("0.00");
+  const [activeStrategyId, setActiveStrategyId] = useState(0);
+  const [decisionLog, setDecisionLog] = useState<any>(null);
   const [txHash, setTxHash] = useState("");
   const [txStatus, setTxStatus] = useState<"idle" | "pending" | "success" | "error">("idle");
   const [txError, setTxError] = useState("");
@@ -30,13 +32,29 @@ export default function AppPage() {
       setVaultBalance(snap.vaultBalance);
       setTotalAssets(snap.totalAssets);
       setApy(snap.apy);
+      setActiveStrategyId(snap.activeStrategyId);
     } catch (e) {
       console.error(e);
     }
   }
 
+  async function refreshDecisionLog(nextChainId: number) {
+    try {
+      const res = await fetch(`/deployments/decision-log-${nextChainId}.json`, { cache: "no-store" });
+      if (!res.ok) {
+        setDecisionLog(null);
+        return;
+      }
+      const data = await res.json();
+      setDecisionLog(data);
+    } catch (e) {
+      setDecisionLog(null);
+    }
+  }
+
   useEffect(() => {
     void refresh();
+    void refreshDecisionLog(chainId);
   }, [provider, address, chainId]);
 
   async function onConnected(p: ethers.providers.Web3Provider, addr: string, cid: number) {
@@ -129,6 +147,32 @@ export default function AppPage() {
         switchChain={switchChain}
         wrongChain={wrongChain}
       />
+
+      <div className="card" style={{ marginTop: 16 }}>
+        <h3>Active Strategy</h3>
+        <p className="muted" style={{ marginTop: 8 }}>activeStrategyId: {activeStrategyId}</p>
+      </div>
+
+      <div className="card" style={{ marginTop: 16 }}>
+        <h3>Latest Agent Decision Log</h3>
+        {!decisionLog && <p className="muted" style={{ marginTop: 8 }}>No decision log found yet for this chain.</p>}
+        {decisionLog && (
+          <>
+            <p className="muted" style={{ marginTop: 8 }}>Executed: {String(decisionLog.executed)}</p>
+            <p className="muted">Opportunity Score: {Number(decisionLog.opportunityScore || 0).toFixed(4)}</p>
+            <p className="muted">Risk Score (B): {Number(decisionLog.riskScoreB || 0).toFixed(4)}</p>
+            <p className="muted">Timestamp: {decisionLog.timestamp || "N/A"}</p>
+            {decisionLog.txHash && (
+              <p style={{ marginTop: 8 }}>
+                Tx Hash:{" "}
+                <a target="_blank" rel="noreferrer" href={`${explorerBase(chainId)}/tx/${decisionLog.txHash}`}>
+                  {decisionLog.txHash}
+                </a>
+              </p>
+            )}
+          </>
+        )}
+      </div>
     </main>
   );
 }

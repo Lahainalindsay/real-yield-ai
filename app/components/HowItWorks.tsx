@@ -1,8 +1,8 @@
 const steps = [
   { title: "Deposit", text: "Approve mUSDC and deposit into the vault." },
-  { title: "Allocate", text: "Vault tracks pooled assets for strategy allocation." },
-  { title: "Earn", text: "Mock oracle updates APY and yield projections." },
-  { title: "Withdraw", text: "Withdraw principal from your vault balance." }
+  { title: "Monitor", text: "Read APY and onchain strategy metrics in real time." },
+  { title: "Decide", text: "Use deterministic opportunity/risk scores and AI explanations." },
+  { title: "Execute", text: "Agent can switch active strategy onchain when rule is satisfied." }
 ];
 
 export default function HowItWorks() {

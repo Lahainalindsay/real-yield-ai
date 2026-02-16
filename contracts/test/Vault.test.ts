@@ -53,4 +53,15 @@ describe("Vault", function () {
     const { vault } = await deployFixture();
     expect(await vault.currentAPYBps()).to.equal(450);
   });
+
+  it("allows owner to set active strategy", async function () {
+    const { vault } = await deployFixture();
+    await vault.setActiveStrategy(2);
+    expect(await vault.activeStrategyId()).to.equal(2);
+  });
+
+  it("blocks non-agent non-owner strategy updates", async function () {
+    const { user, vault } = await deployFixture();
+    await expect(vault.connect(user).setActiveStrategy(2)).to.be.revertedWith("not-authorized");
+  });
 });

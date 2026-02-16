@@ -7,8 +7,11 @@
     "test": "hardhat test",
     "deploy:bscTestnet": "hardhat run scripts/deploy.ts --network bscTestnet",
     "deploy:opBnbTestnet": "hardhat run scripts/deploy.ts --network opBnbTestnet",
+    "agent:once:bscTestnet": "hardhat run scripts/runAgentOnce.ts --network bscTestnet",
+    "agent:once:opBnbTestnet": "hardhat run scripts/runAgentOnce.ts --network opBnbTestnet",
     "seed:bscTestnet": "hardhat run scripts/seed.ts --network bscTestnet",
-    "verify:bscTestnet": "hardhat run scripts/verify.ts --network bscTestnet"
+    "verify:bscTestnet": "hardhat run scripts/verify.ts --network bscTestnet",
+    "verify:opBnbTestnet": "hardhat run scripts/verify.ts --network opBnbTestnet"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",

@@ -23,6 +23,11 @@ async function main() {
   });
 
   await run("verify:verify", {
+    address: deployment.strategyManager,
+    constructorArguments: []
+  });
+
+  await run("verify:verify", {
     address: deployment.vault,
     constructorArguments: [deployment.erc20, deployment.yieldOracle]
   });
