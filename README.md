@@ -162,3 +162,53 @@ npx hardhat run scripts/verify.ts --network bscTestnet
 - [x] AI Build Log included
 - [x] Reproducible setup instructions
 - [x] No token launch/fundraising mechanics
+
+🚀 Good Vibes Only: OpenClaw Edition Submission Checklist
+
+Track Selected:
+☑ DeFi
+☑ Agent (AI explains and analyzes onchain state)
+
+🔗 Repo
+
+GitHub: https://github.com/Lahainalindsay/real-yield-ai
+
+🌐 Demo
+
+Live Demo Link: (Add Vercel/Netlify link here)
+
+⛓ Onchain Proof (BNB Testnet)
+
+Network: BSC Testnet (Chain ID 97)
+
+Vault Contract Address: TBD
+
+Mock USDC Address: TBD
+
+Yield Oracle Address: TBD
+
+Proof Deposit Transaction Hash: TBD
+
+🤖 AI Build Log
+
+See: AI_BUILD_LOG.md
+
+Documents:
+
+Prompts used
+
+AI-generated code
+
+Manual modifications
+
+Architecture decisions
+
+🧪 Reproducibility
+
+To reproduce locally:
+
+git clone https://github.com/Lahainalindsay/real-yield-ai.git
+cd real-yield-ai
+npm install
+npm run deploy:bscTestnet
+npm run dev
