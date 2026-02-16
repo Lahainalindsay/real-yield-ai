@@ -44,7 +44,8 @@ export default function AppPage() {
     setAddress(addr);
     setChainId(cid);
 
-    p.provider.on?.("chainChanged", (hexChainId: string) => {
+    const externalProvider = p.provider as any;
+    externalProvider.on?.("chainChanged", (hexChainId: string) => {
       setChainId(parseInt(hexChainId, 16));
     });
   }
