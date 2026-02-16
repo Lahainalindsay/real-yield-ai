@@ -140,11 +140,13 @@ Live Demo Link: (Add Vercel/Netlify link here)
 
 Network: BSC Testnet (Chain ID 97)
 
-Vault Contract Address: TBD
+Vault Contract Address: 0xa2cc48402aE7b4E7D13651e7465edF3286c4E368
 
-Mock USDC Address: TBD
+Mock USDC Address: 0xB1Ad99A0beCF068f63552550522693Cb9edcd777
 
-Yield Oracle Address: TBD
+Yield Oracle Address: 0xf55CA673F47ceE7aF895f9a641112D78C76c2E27
+
+Strategy Manager Address: 0x7Bb60C4709efA8AD7472De272F7c26f9433F7804
 
 Proof Deposit Transaction Hash: TBD
 
