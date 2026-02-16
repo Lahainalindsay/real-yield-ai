@@ -1,0 +1,14 @@
+node_modules
+.env
+.env.local
+.next
+out
+dist
+artifacts
+cache
+typechain-types
+coverage
+deployments/decision-log-*.json
+deployments/*.json
+app/public/deployments/decision-log-*.json
+app/public/deployments/*.json
