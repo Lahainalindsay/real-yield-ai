@@ -1,0 +1,46 @@
+{
+  "timestamp": "2026-02-16T15:24:03.308Z",
+  "chainId": 97,
+  "blockNumber": 90714209,
+  "agent": "0x1E723C7eB481095B0b572A09a63D9Cd668686922",
+  "activeStrategyBefore": 1,
+  "activeStrategyAfter": 1,
+  "strategyA": {
+    "name": "Strategy A",
+    "apyBps": 420,
+    "liquidityBps": 9000,
+    "utilizationBps": 3000,
+    "enabled": true
+  },
+  "strategyB": {
+    "name": "Strategy B",
+    "apyBps": 650,
+    "liquidityBps": 8000,
+    "utilizationBps": 3500,
+    "enabled": true
+  },
+  "trendB": "flat",
+  "apyDeltaBps": 230,
+  "liquidityDeltaBps": -1000,
+  "flowWindowBlocks": 200,
+  "netFlowLastN": "1000000000000000000",
+  "opportunityScore": 0.36,
+  "baseRiskScoreB": 0.55,
+  "trendPenalty": 0,
+  "trendBonus": 0,
+  "withdrawalPenalty": 0,
+  "riskScoreB": 0.55,
+  "confidenceScore": 0.30999999999999994,
+  "cooldownBlocks": 30,
+  "inCooldown": false,
+  "reasons": [
+    "Signal set did not cross deterministic action thresholds."
+  ],
+  "reasonFlags": 3,
+  "decisionRule": "switch_to_2: apyDelta>=180 && liqB>=7000 && risk<=0.62 && confidence>=0.55; switch_to_1: high risk or negative trend+outflow or weak delta",
+  "action": "HOLD",
+  "executed": false,
+  "txHash": null,
+  "decisionEventTxHash": "0x7ce16e2df4219ff99817aa8ed161ae7dd65251c24e5975c6774ac46819809353",
+  "decisionId": "0x332364c865b487437acdc1b2d5ed52611299cec9af1958df801b0820fbec6c23"
+}

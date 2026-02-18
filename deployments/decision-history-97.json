@@ -1,0 +1,17 @@
+[
+  {
+    "timestamp": "2026-02-16T15:24:03.308Z",
+    "blockNumber": 90714209,
+    "action": "HOLD",
+    "executed": false,
+    "activeStrategyBefore": 1,
+    "activeStrategyAfter": 1,
+    "opportunityScore": 0.36,
+    "riskScoreB": 0.55,
+    "confidenceScore": 0.30999999999999994,
+    "reasonFlags": 3,
+    "txHash": null,
+    "decisionEventTxHash": "0x7ce16e2df4219ff99817aa8ed161ae7dd65251c24e5975c6774ac46819809353",
+    "decisionId": "0x332364c865b487437acdc1b2d5ed52611299cec9af1958df801b0820fbec6c23"
+  }
+]

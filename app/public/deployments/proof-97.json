@@ -1,0 +1,10 @@
+{
+  "chainId": 97,
+  "user": "0x1E723C7eB481095B0b572A09a63D9Cd668686922",
+  "approveTxHash": "0x3a9015e6d8810ea32312243c0e9cb9d224336482fba0219258a90e378ce54390",
+  "depositTxHash": "0x5cec10af72d79276ed716face9bec90ca6220afc57ffdb7df4a45899bdf7f846",
+  "amount": "1.0 mUSDC",
+  "vault": "0xa2cc48402aE7b4E7D13651e7465edF3286c4E368",
+  "erc20": "0xB1Ad99A0beCF068f63552550522693Cb9edcd777",
+  "timestamp": "2026-02-16T09:46:09.423Z"
+}

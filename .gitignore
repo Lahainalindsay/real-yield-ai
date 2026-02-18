@@ -12,3 +12,11 @@ deployments/decision-log-*.json
 deployments/*.json
 app/public/deployments/decision-log-*.json
 app/public/deployments/*.json
+!deployments/*.json
+!deployments/decision-log-*.json
+!deployments/decision-history-*.json
+!deployments/proof-*.json
+!app/public/deployments/*.json
+!app/public/deployments/decision-log-*.json
+!app/public/deployments/decision-history-*.json
+!app/public/deployments/proof-*.json
