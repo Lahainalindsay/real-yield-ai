@@ -6,7 +6,11 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 async function main() {
-  const [signer] = await ethers.getSigners();
+  const signers = await ethers.getSigners();
+  if (!signers.length) {
+    throw new Error("No signer found. Set PRIVATE_KEY in contracts/.env (0x-prefixed) and retry.");
+  }
+  const signer = signers[0];
   const chainId = (await ethers.provider.getNetwork()).chainId.toString();
 
   const to = process.env.SEED_TO;

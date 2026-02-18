@@ -1,100 +1,80 @@
-# real-yield-ai
+# real-bnb-vault
 
-Good Vibes Only: OpenClaw Edition MVP.
+A verifiable, deterministic DeFi agent stack for hackathon demo and judging.
 
-## Overview
-This repo delivers:
-- Landing page with full-screen hero + overlay CTAs
-- Vault app (`/app`) for wallet connect, approve/deposit/withdraw, strategy state
-- Yield insights page (`/yield`) for APY + strategy metrics + deterministic recommendation
-- AI assistant API (`/api/assistant`) that explains decisions from onchain snapshot data
-- Hardhat v2 + TypeScript contracts on BSC Testnet / opBNB Testnet
+## One-Line Pitch
+**Deterministic onchain logic decides, AI explains, artifacts prove.**
 
-## Compliance Notes
-- Onchain proof: contract addresses and tx hashes are written to `deployments/*.json`
-- Reproducible: public repo + setup + run instructions in this README
-- AI-first: `AI_BUILD_LOG.md` documents prompts, outputs, edits, decisions
-- No token launch/fundraising: no liquidity launch, no airdrop pumping, no fundraising logic
+## Why This Project Is Compelling
+- **Verifiable agent workflow:** Every run produces reproducible JSON artifacts and explorer-verifiable tx links.
+- **Deterministic scoring core:** Opportunity, risk, and confidence are computed from explicit rules.
+- **Explainability layer:** AI translates deterministic outputs into plain language for operators and judges.
+- **Working end-to-end demo:** Connect wallet, read onchain metrics, run vault actions, inspect proof/history.
 
-## Tech Stack
-- Hardhat v2 + TypeScript
-- Solidity `0.8.20`
-- OpenZeppelin contracts
-- Next.js pages router + ethers v5 + Web3Modal
+## What Is Implemented Today
+### Frontend
+- `/` landing page with clear product narrative and artifact links.
+- `/app` vault console:
+  - Connect wallet
+  - Approve / Deposit / Withdraw
+  - Deterministic decision display
+  - Deployment + proof artifacts
+- `/yield` strategy intelligence:
+  - Deterministic strategy scoring table
+  - Recommendation framing (opportunity/risk/confidence)
+  - Assistant-ready context
 
-## Contracts
-- `ERC20Mock` (`mUSDC`, mintable by owner)
-- `YieldOracleMock` (`currentAPYBps`, owner updatable)
-- `StrategyManager` (onchain strategy metrics registry)
-- `Vault` (deposit/withdraw + `activeStrategyId` + owner/agent strategy switch)
+### Backend / API
+- `/api/assistant`:
+  - Uses OpenAI when key is valid
+  - Automatically falls back to deterministic local explanation when key is missing/placeholder/invalid
+- `/api/autonomous-action`:
+  - Returns simulation-only proposed actions (`GET` and `POST`)
 
-## Network Config
-Default: **BSC Testnet**
-- Chain ID: `97`
-- RPC: `https://data-seed-prebsc-1-s1.bnbchain.org:8545`
-- Explorer: `https://testnet.bscscan.com`
+### Smart Contracts / Scripts
+- `ERC20Mock` (`mUSDC`)
+- `YieldOracleMock`
+- `StrategyManager`
+- `Vault`
+- Hardhat scripts for deploy, proof tx, deterministic agent run, verification
 
-Optional: **opBNB Testnet**
-- Chain ID: `5611`
-- RPC: `https://opbnb-testnet-rpc.bnbchain.org`
-- Explorer: `https://testnet.opbnbscan.com`
+## Judge-First Architecture
+1. **Onchain state read** (`readSnapshot`)
+2. **Deterministic scoring** (opportunity/risk/confidence)
+3. **Recommendation + reason flags**
+4. **Artifact export** (`deployments/*.json`, proof + decision logs)
+5. **AI explanation** mapped to deterministic outputs
 
-## Setup
+## Repository Layout
+```text
+real-bnb-vault/
+├── app/                 # Next.js frontend + API routes
+├── contracts/           # Hardhat + Solidity contracts/scripts/tests
+├── deployments/         # Canonical artifact outputs (addresses/proof/decision history)
+├── AI_BUILD_LOG.md      # Build log and implementation notes
+└── README.md
+```
+
+## Quick Start
 ```bash
 npm install
 cp contracts/.env.example contracts/.env
 cp app/.env.local.example app/.env.local
 ```
 
-Set `contracts/.env`:
-- `PRIVATE_KEY`
-- `BSCSCAN_API_KEY`
-- `OPBNBSCAN_API_KEY`
-- `BSC_TESTNET_RPC_URL`
-- `OPBNB_TESTNET_RPC_URL`
+Set required values:
 
-Set `app/.env.local`:
-- `NEXT_PUBLIC_DEFAULT_CHAIN_ID` (`97` recommended)
-- `NEXT_PUBLIC_ERC20_ADDRESS` (optional if loading `public/deployments/<chainId>.json`)
-- `NEXT_PUBLIC_VAULT_ADDRESS` (optional)
-- `NEXT_PUBLIC_YIELD_ORACLE_ADDRESS` (optional)
-- `NEXT_PUBLIC_STRATEGY_MANAGER_ADDRESS` (optional)
-- `OPENAI_API_KEY`
-- `AI_MODEL` (optional)
+- `contracts/.env`
+  - `PRIVATE_KEY`
+  - `BSC_TESTNET_RPC_URL`
+  - Optional explorer keys
 
-## Compile and Test
-```bash
-npm run test
-npm run build
-```
+- `app/.env.local`
+  - `NEXT_PUBLIC_DEFAULT_CHAIN_ID=97`
+  - Optional explicit contract addresses (otherwise loaded from public deployments JSON)
+  - `OPENAI_API_KEY` (optional; fallback mode works without it)
 
-## Deploy (BSC Testnet)
-```bash
-npm run deploy:bscTestnet
-```
-Writes:
-- `deployments/97.json`
-- `app/public/deployments/97.json`
-
-## Produce Onchain Proof
-Proof deposit tx:
-```bash
-cd contracts
-npx hardhat run scripts/proofTx.ts --network bscTestnet
-```
-Writes:
-- `deployments/proof-97.json`
-
-Run deterministic agent once:
-```bash
-cd ..
-npm run run-agent:bscTestnet
-```
-Writes:
-- `deployments/decision-log-97.json`
-- `app/public/deployments/decision-log-97.json`
-
-## Run Frontend
+## Run Locally
 ```bash
 npm run dev
 ```
@@ -103,78 +83,44 @@ Open:
 - `http://localhost:3000/app`
 - `http://localhost:3000/yield`
 
-## Verify Contracts
+## Deploy + Generate Proof (BSC Testnet)
 ```bash
-cd contracts
-npx hardhat run scripts/verify.ts --network bscTestnet
-# or
-npx hardhat run scripts/verify.ts --network opBnbTestnet
-```
-
-## Testnet BNB
-Use the official BNB Chain testnet faucet and docs for the current faucet URL.
-
-## Where Submission Evidence Lives
-- Contract addresses: `deployments/97.json` (or `deployments/5611.json`)
-- Deposit proof tx hash: `deployments/proof-97.json` (or `proof-5611.json`)
-- Agent action tx hash: `deployments/decision-log-97.json` (or `decision-log-5611.json`)
-
-## No Token Launch Policy
-This project does not include token launch, LP bootstrap, fundraising, or airdrop mechanics.
-
-## Good Vibes Only: OpenClaw Edition Submission Checklist
-
-Track Selected:
-☑ DeFi
-☑ Agent (AI explains and analyzes onchain state)
-
-🔗 Repo
-
-GitHub: https://github.com/Lahainalindsay/real-yield-ai
-
-🌐 Demo
-
-Live Demo Link: (Add Vercel/Netlify link here)
-
-⛓ Onchain Proof (BNB Testnet)
-
-Network: BSC Testnet (Chain ID 97)
-
-Vault Contract Address: 0xa2cc48402aE7b4E7D13651e7465edF3286c4E368
-
-Mock USDC Address: 0xB1Ad99A0beCF068f63552550522693Cb9edcd777
-
-Yield Oracle Address: 0xf55CA673F47ceE7aF895f9a641112D78C76c2E27
-
-Strategy Manager Address: 0x7Bb60C4709efA8AD7472De272F7c26f9433F7804
-
-Proof Deposit Transaction Hash: 0x5cec10af72d79276ed716face9bec90ca6220afc57ffdb7df4a45899bdf7f846
-Proof Deposit Explorer: https://testnet.bscscan.com/tx/0x5cec10af72d79276ed716face9bec90ca6220afc57ffdb7df4a45899bdf7f846
-Agent Execution Transaction Hash: 0xf55d75d5d696cd6daa26ff2e995112ba0592cb3993e5522879cb470d0af6a2d5
-Agent Execution Explorer: https://testnet.bscscan.com/tx/0xf55d75d5d696cd6daa26ff2e995112ba0592cb3993e5522879cb470d0af6a2d5
-
-🤖 AI Build Log
-
-See: AI_BUILD_LOG.md
-
-Documents:
-
-Prompts used
-
-AI-generated code
-
-Manual modifications
-
-Architecture decisions
-
-🧪 Reproducibility
-
-To reproduce locally:
-
-```bash
-git clone https://github.com/Lahainalindsay/real-yield-ai.git
-cd real-yield-ai
-npm install
 npm run deploy:bscTestnet
-npm run dev
+cd contracts
+npx hardhat run scripts/proofTx.ts --network bscTestnet
+cd ..
+npm run run-agent:bscTestnet
 ```
+
+Generated evidence:
+- `deployments/97.json`
+- `deployments/proof-97.json`
+- `deployments/decision-log-97.json`
+- `deployments/decision-history-97.json`
+- mirrored files under `app/public/deployments/`
+
+## 2-Minute Judge Demo Script
+1. Open `/app` and connect wallet.
+2. Show network check + live balances/APY.
+3. Execute a testnet action (approve/deposit/withdraw).
+4. Open proof and deployment links (explorer verification).
+5. Show decision timeline and reason flags.
+6. Open `/yield` and show deterministic ranking table.
+7. Ask assistant: “Why is this the top strategy right now?”
+8. Show that response is grounded in deterministic snapshot data.
+
+## Key Artifact Files for Judging
+- `app/public/deployments/97.json`
+- `app/public/deployments/proof-97.json`
+- `app/public/deployments/decision-log-97.json`
+- `app/public/deployments/decision-history-97.json`
+
+## Mainnet Path (Post-Hackathon)
+- Protocol-specific risk adaptors
+- Monitoring + alerting
+- Governance-bound execution policies
+- Formalized policy constraints and production hardening
+
+## Notes
+- Testnet/demo project: no guaranteed returns.
+- Assistant explains, but does not sign or execute wallet transactions.

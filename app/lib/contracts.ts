@@ -19,7 +19,8 @@ export const vaultAbi = [
 
 export const oracleAbi = ["function currentAPYBps() external view returns (uint256)"];
 export const strategyManagerAbi = [
-  "function getStrategy(uint256 id) external view returns (tuple(string name, uint256 apyBps, uint256 liquidityBps, uint256 utilizationBps, bool enabled))"
+  "function getStrategy(uint256 id) external view returns (tuple(string name, uint256 apyBps, uint256 liquidityBps, uint256 utilizationBps, bool enabled))",
+  "function getAPYTrend(uint256 id) external view returns (int8)"
 ];
 
 export type Deployment = {

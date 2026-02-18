@@ -1,13 +1,35 @@
 import { useState } from "react";
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
+import { Button } from "./ui/Button";
 
-type Props = {
+type LegacyProps = {
   onConnected: (provider: ethers.providers.Web3Provider, address: string, chainId: number) => void;
 };
 
-export default function ConnectButton({ onConnected }: Props) {
+type UiProps = {
+  connected: boolean;
+  label: string;
+  onClick: () => Promise<void> | void;
+};
+
+type Props = LegacyProps | UiProps;
+
+function isLegacyProps(props: Props): props is LegacyProps {
+  return "onConnected" in props;
+}
+
+export default function ConnectButton(props: Props) {
   const [label, setLabel] = useState("Connect Wallet");
+
+  if (!isLegacyProps(props)) {
+    return (
+      <Button variant={props.connected ? "success" : "primary"} onClick={props.onClick}>
+        {props.label}
+      </Button>
+    );
+  }
+  const legacyProps = props;
 
   async function connect() {
     try {
@@ -18,7 +40,7 @@ export default function ConnectButton({ onConnected }: Props) {
       const address = await signer.getAddress();
       const network = await provider.getNetwork();
       setLabel(`${address.slice(0, 6)}...${address.slice(-4)}`);
-      onConnected(provider, address, network.chainId);
+      legacyProps.onConnected(provider, address, network.chainId);
     } catch (err) {
       console.error(err);
       setLabel("Connect Wallet");
@@ -26,8 +48,8 @@ export default function ConnectButton({ onConnected }: Props) {
   }
 
   return (
-    <button className="btn btn-primary" onClick={connect} type="button">
+    <Button variant="primary" onClick={connect} type="button">
       {label}
-    </button>
+    </Button>
   );
 }

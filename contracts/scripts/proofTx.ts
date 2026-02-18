@@ -3,7 +3,11 @@ import fs from "fs";
 import path from "path";
 
 async function main() {
-  const [signer] = await ethers.getSigners();
+  const signers = await ethers.getSigners();
+  if (!signers.length) {
+    throw new Error("No signer found. Set PRIVATE_KEY in contracts/.env (0x-prefixed) and retry.");
+  }
+  const signer = signers[0];
   const chainId = (await ethers.provider.getNetwork()).chainId.toString();
 
   const deploymentFile = path.join(__dirname, "..", "..", "deployments", `${chainId}.json`);

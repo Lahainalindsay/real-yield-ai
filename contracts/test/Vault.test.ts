@@ -64,4 +64,29 @@ describe("Vault", function () {
     const { user, vault } = await deployFixture();
     await expect(vault.connect(user).setActiveStrategy(2)).to.be.revertedWith("not-authorized");
   });
+
+  it("tracks net flow from deposits and withdrawals", async function () {
+    const { user, token, vault } = await deployFixture();
+    const amount = ethers.parseEther("10");
+
+    await token.connect(user).approve(await vault.getAddress(), amount);
+    await vault.connect(user).deposit(amount);
+    await vault.connect(user).withdraw(ethers.parseEther("4"));
+
+    const net = await vault.netFlowLastNBlocks(20);
+    expect(net).to.equal(ethers.parseEther("6"));
+  });
+
+  it("emits onchain decision event", async function () {
+    const { vault } = await deployFixture();
+    const decisionId = ethers.keccak256(ethers.toUtf8Bytes("decision-test"));
+    await expect(vault.recordDecision("HOLD", 4200, 5500, 0, decisionId)).to.emit(vault, "Decision");
+  });
+
+  it("enforces min strategy switch cooldown onchain", async function () {
+    const { vault } = await deployFixture();
+    await vault.setActiveStrategy(1);
+    await vault.setMinStrategySwitchBlocks(100);
+    await expect(vault.setActiveStrategy(2)).to.be.revertedWith("switch-cooldown-active");
+  });
 });

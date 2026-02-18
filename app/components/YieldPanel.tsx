@@ -1,32 +1,45 @@
-type Props = {
-  apy: string;
-};
+import React from "react";
+import { Card, CardBody } from "./ui/Card";
+import { Badge } from "./ui/Badge";
 
-const history = [3.8, 4.0, 4.1, 4.2, 4.4, 4.5, 4.5];
-
-export default function YieldPanel({ apy }: Props) {
-  const max = Math.max(...history, 5);
+export default function YieldPanel({ apy, trendLabel }: { apy?: string; trendLabel?: string }) {
+  const bars = [18, 32, 26, 48, 54, 44, 62];
 
   return (
-    <div className="card">
-      <h2>Live Yield</h2>
-      <p className="muted" style={{ marginTop: 8 }}>APY from `YieldOracleMock.currentAPYBps`</p>
-      <h3 style={{ marginTop: 10 }}>{apy}%</h3>
+    <Card className="card2">
+      <CardBody>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
+          <div>
+            <div className="h3">Yield</div>
+            <div className="muted2" style={{ marginTop: 4 }}>
+              Onchain APY + Illustrative 7-Day Trend
+            </div>
+            <div className="muted2" style={{ marginTop: 2, fontSize: 12 }}>APY is read directly from onchain state.</div>
+          </div>
+          <Badge variant={trendLabel?.toLowerCase().includes("up") ? "good" : trendLabel?.toLowerCase().includes("down") ? "bad" : "default"}>
+            {trendLabel ?? "Trend"}
+          </Badge>
+        </div>
 
-      <div className="chart" style={{ marginTop: 14 }}>
-        {history.map((v, i) => (
-          <div
-            key={i}
-            className="bar"
-            style={{ height: `${(v / max) * 100}%` }}
-            title={`Day ${i + 1}: ${v}%`}
-          />
-        ))}
-      </div>
+        <hr className="hr" />
 
-      <p className="muted" style={{ marginTop: 12 }}>
-        7-day chart is demo history for MVP visualization. Live APY value above is read directly onchain.
-      </p>
-    </div>
+        <div className="grid" style={{ gap: 12 }}>
+          <div className="stat">
+            <div className="stat-k">Current APY</div>
+            <div className="stat-v">{apy ?? "—"}%</div>
+          </div>
+
+          <div className="chart" aria-label="Demo yield trend chart">
+            {bars.map((h, i) => (
+              <div key={i} className="bar" style={{ height: `${h}%` }} />
+            ))}
+          </div>
+
+          <p className="muted2" style={{ fontSize: 12 }}>
+            Note: the bar chart is illustrative; APY value above is from onchain reads.
+          </p>
+        </div>
+      </CardBody>
+    </Card>
   );
 }

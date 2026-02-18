@@ -5,14 +5,15 @@ export async function readSnapshot(provider: ethers.providers.Web3Provider, addr
   const deployment = await resolveDeployment(chainId);
   const { erc20, vault, oracle, strategyManager } = contractsFromProvider(provider, deployment);
 
-  const [tokenBal, userVaultBal, totalAssets, apyBps, activeStrategyId, strategyA, strategyB] = await Promise.all([
+  const [tokenBal, userVaultBal, totalAssets, apyBps, activeStrategyId, strategyA, strategyB, trendB] = await Promise.all([
     erc20.balanceOf(address),
     vault.balanceOf(address),
     vault.totalAssets(),
     oracle.currentAPYBps(),
     vault.activeStrategyId(),
     strategyManager.getStrategy(1),
-    strategyManager.getStrategy(2)
+    strategyManager.getStrategy(2),
+    strategyManager.getAPYTrend(2)
   ]);
 
   return {
@@ -35,6 +36,8 @@ export async function readSnapshot(provider: ethers.providers.Web3Provider, addr
       liquidityBps: Number(strategyB.liquidityBps),
       utilizationBps: Number(strategyB.utilizationBps),
       enabled: Boolean(strategyB.enabled)
-    }
+    },
+    trendB: Number(trendB),
+    trendBLabel: Number(trendB) > 0 ? "rising" : Number(trendB) < 0 ? "falling" : "flat"
   };
 }

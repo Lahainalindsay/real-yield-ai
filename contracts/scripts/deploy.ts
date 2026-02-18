@@ -3,7 +3,11 @@ import fs from "fs";
 import path from "path";
 
 async function main() {
-  const [deployer] = await ethers.getSigners();
+  const signers = await ethers.getSigners();
+  if (!signers.length) {
+    throw new Error("No signer found. Set PRIVATE_KEY in contracts/.env (0x-prefixed) and retry.");
+  }
+  const deployer = signers[0];
   const chainId = network.config.chainId?.toString() || (await ethers.provider.getNetwork()).chainId.toString();
 
   console.log(`Deploying to ${network.name} (chainId ${chainId})`);
